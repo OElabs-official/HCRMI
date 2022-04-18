@@ -1,0 +1,57 @@
+[package]
+name = "hcrmi"
+version = "0.1.0"
+edition = "2021"
+ 
+# about
+# HCRMI : High compression rate multi-image storage system  @OE_LABS
+# MPL2
+
+# decoder support : 
+    # T0: jpeg, png, avif, webp
+    # T1: heif, bpg, jpg2k, bmp, tiff, openexr
+# encoder : AVIF
+# function : ocr
+
+[dependencies]
+
+ravif = "0.8.9" # BSD-3-Clause 
+
+# decoder
+image = "0.24.1" # MIT include PNG JPEG GIF BMP ICO TIFF WebP AVIF PNM DDS TGA OpenEXR farbfeld
+libheif-rs = "0.15.0"
+jpeg2k = "0.5.3"
+# jpeg-decoder = "0.2.2" # MIT OR Apache-2.0 
+# jpeg-encoder = "0.5.0" # MIT OR Apache-2.0 
+# png = "0.17.5" # MIT OR Apache-2.0 
+# webp = "0.2.2" # MIT OR Apache-2.0 
+# rav1e = "0.5.1" # BSD-2-Clause av1 video encoder try 10 or 12bit in future
+# ?BPG
+# bmp = "0.5.0"
+# tiff = "0.7.1"
+# exr = "1.4.1"
+
+#wrap
+#avif-serialize = "0.7.6" # BSD-3-Clause incuded in ravif
+
+rgb = "0.8.32"
+json = "0.12.4"
+
+# OCR engine
+    # https://github.com/tesseract-ocr/tesseract GOOGLE tesseract   
+    # https://github.com/PaddlePaddle/PaddleOCR BAIDU  PaddleOCR (x)
+    # https://cloud.tencent.com/document/product/866/17619 Tencent OCR free 1000/m
+    # https://cloud.google.com/vision with reqwest
+tesseract = "0.11.0" # MIT , test OK 
+reqwest = "0.11.10" #  MIT OR Apache-2.0 for cloud APIs
+
+
+#local
+explorer_lib = {path="/run/media/akitsuki/1CDE887D3796F7AA/code-x/oelab_projects/explorer_lib"}
+
+#rt
+tokio = { version = "1.17.0", features = ["full"] } # MIT
+num_cpus = "1.13.1" # MIT OR Apache-2.0 
+
+#benchmark
+simple-stopwatch = "0.1.4"
