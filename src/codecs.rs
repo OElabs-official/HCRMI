@@ -9,9 +9,42 @@ pub mod decoder
             io::{BufReader,},
             fs::File,
             fmt,
-            error::Error
+            error::Error,
         },
+        tiff::decoder::{Decoder,DecodingResult}
     };
+
+
+
+
+    #[test]
+    fn test_1020_dng_by_image()->Result<(),Box<dyn Error>>
+    {
+        let path = "/run/media/akitsuki/1CDE887D3796F7AA/code-x/test0/data/lumia1020/berries-raw.tif";
+        let input = image::open(path)?;
+        let (w,h) = input.dimensions();
+        println!("{}x{}",w,h);
+        Ok(())
+    }
+
+    #[test]
+    fn test_1020_dng_by_tiff()->Result<(),Box<dyn Error>>
+    {
+        let path_1020 = "/run/media/akitsuki/1CDE887D3796F7AA/code-x/test0/data/lumia1020/berries-raw.dng"; //ok
+        let path_em1ii = "/run/media/akitsuki/1CDE887D3796F7AA/code-x/test0/data/0ev.ORF"; //TiffSignatureInvalid
+        let path_gh6 = "/run/media/akitsuki/1CDE887D3796F7AA/code-x/test0/data/gh6/P1030897.RW2"; //TiffSignatureInvalid
+        let mut input = Decoder::new(File::open(path_1020)?)?;
+        let (w,h) = input.dimensions()?;
+        println!("{}x{},{}",w,h,input.more_images());
+        let img = input.read_image()?;
+        match img
+        {
+            DecodingResult::U8(v)=>{println!("u8")}, //return u8
+            _=>{}
+        }
+        
+        Ok(())
+    }
 
     #[derive(Debug)]
     struct DecodeErr (String);

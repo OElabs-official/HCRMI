@@ -22,6 +22,7 @@ async fn main() ->Result<(),Box<dyn Error>>
     Ok(())
 }
 
+
 // #[test]
 async fn ocr() ->Result<(),Box<dyn Error>>
 {
@@ -30,7 +31,8 @@ async fn ocr() ->Result<(),Box<dyn Error>>
     let mut matchs = MatchBy::default(); matchs.extensions=Some(EXT_PHOTOS);
     let vphotos = exp0.match_files(matchs)?.iter().map(|x0|{x0.get_path()}).collect::<Vec<_>>();
     let mut vthread = vec![];
-    async fn thread_ocr(path : &PathBuf) ->Result<(),Box<dyn Error>>
+    let mut js0 = json::JsonValue::new_array();
+    async fn thread_ocr(path : &PathBuf) ->Result<(String,PathBuf),Box<dyn Error>>
     {
         let sw0 = sw::Stopwatch::start_new();
         let x = codecs::decoder::decode(path)?;
@@ -39,8 +41,11 @@ async fn ocr() ->Result<(),Box<dyn Error>>
         let ocr = ocr_from_frame(&x.0,  x.1 as i32, x.2 as i32, 3, x.1 as i32 *3, "chi_sim")?;
         let ocr = ocr.split(' ').collect::<String>();
         let time1 = sw1.s();
-        println!("{}\ndecode time:{}sec,\nocr time:{}sec",ocr,time0,time1);     
-        Ok(())
+        println!("{}\ndecode time:{}sec,\nocr time:{}sec",ocr,time0,time1);    
+        let img0 = codecs::encoder::encode_to_avif(&x.0, x.1,x.2, 5.0, 3)?;
+        let mut file0 = PathBuf::from(path.file_name().unwrap());file0.set_extension("avif");
+        std::fs::write(file0.clone(), img0)?;
+        Ok((ocr,file0))
     }
     for i0 in vphotos.iter()
     {
@@ -54,8 +59,13 @@ async fn ocr() ->Result<(),Box<dyn Error>>
     }
     for i0 in vthread
     {
-        let _ = i0.await;
+        let s0 = i0.await?;
+        let mut jv0 = json::JsonValue::new_object();
+        jv0.insert(s0.1.to_str().unwrap(), s0.0)?;
+        js0.push(jv0)?;
     }
+    js0.write(&mut std::fs::File::create("ocr.json")?)?;
+    // std::fs::write("ocr.json", js0)?;
     Ok(())
 }
 
@@ -158,7 +168,29 @@ mod speed_and_quality
     pub static FASTER_PHOTOGRAPH : (f32,u8) = (90f32,9u8);    
 }
 
+mod tar
+{
+    use 
+    {
+        tokio::fs::File,
+        tokio_tar::Builder,
+        std::error::Error,
+    };
+    #[tokio::test]
+    async fn write_tar()->Result<(),Box<dyn Error>>
+    {
+        let file = File::create("test.tar").await?;
+        let mut a = Builder::new(file);
+        let inner = "/run/media/akitsuki/1CDE887D3796F7AA/code-x/oelab_projects/HCRMI/img/1.avif";
+        a.append_file("1.avif", &mut File::open(inner).await?).await?;
+        Ok(())
+    }
+    async fn snap_compress()->Result<(),Box<dyn Error>>
+    {
+        Ok(())
+    }
 
+}
 
     // ExtermeSpace=(5f32,3u8);
     // SmartPhoneText=(5f32,5u8),

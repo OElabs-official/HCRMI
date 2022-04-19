@@ -19,7 +19,7 @@ ravif = "0.8.9" # BSD-3-Clause
 
 # decoder
 image = "0.24.1" # MIT include PNG JPEG GIF BMP ICO TIFF WebP AVIF PNM DDS TGA OpenEXR farbfeld
-libheif-rs = "0.15.0"
+libheif-rs = "0.15.0" # MIT
 jpeg2k = "0.5.3"
 # jpeg-decoder = "0.2.2" # MIT OR Apache-2.0 
 # jpeg-encoder = "0.5.0" # MIT OR Apache-2.0 
@@ -28,12 +28,13 @@ jpeg2k = "0.5.3"
 # rav1e = "0.5.1" # BSD-2-Clause av1 video encoder try 10 or 12bit in future
 # ?BPG
 # bmp = "0.5.0"
-# tiff = "0.7.1"
+tiff = "0.7.1"
 # exr = "1.4.1"
 
 #wrap
 #avif-serialize = "0.7.6" # BSD-3-Clause incuded in ravif
-
+tokio-tar = "0.3.0"
+snap = "1.0.5"
 rgb = "0.8.32"
 json = "0.12.4"
 
@@ -55,3 +56,8 @@ num_cpus = "1.13.1" # MIT OR Apache-2.0
 
 #benchmark
 simple-stopwatch = "0.1.4"
+
+
+
+#may useful
+#https://blog.logrocket.com/rust-compression-libraries/ #compress
