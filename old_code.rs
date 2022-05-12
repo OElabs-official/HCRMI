@@ -1,6 +1,19 @@
 /*
     
 */
+async fn writetar ()
+{
+   let mut avif_head;
+    {   
+        println!("write{:?}",&output.2);
+        avif_head = Header::new_gnu();let len0 = output.1.len();
+        avif_head.set_path(&output.2)?;
+        avif_head.set_size(len0 as u64);
+    }
+    tar_buld.append(&avif_head, &output.1[..]).await?; 
+}
+
+
 
 use 
 {

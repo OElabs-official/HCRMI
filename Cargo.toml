@@ -2,7 +2,10 @@
 name = "hcrmi"
 version = "0.1.0"
 edition = "2021"
- 
+# [build--release]
+# rustflags = ["-C","target-feature=+avx2,+fma"]
+
+
 # about
 # HCRMI : High compression rate multi-image storage system  @OE_LABS
 # MPL2
@@ -34,9 +37,10 @@ tiff = "0.7.1"
 #wrap
 #avif-serialize = "0.7.6" # BSD-3-Clause incuded in ravif
 tokio-tar = "0.3.0"
-snap = "1.0.5"
 rgb = "0.8.32"
 json = "0.12.4"
+# async-compression = {version ="0.3.12",features=["tokio"]}
+lz4_flex = "0.9.2"
 
 # OCR engine
     # https://github.com/tesseract-ocr/tesseract GOOGLE tesseract   
@@ -48,7 +52,7 @@ reqwest = "0.11.10" #  MIT OR Apache-2.0 for cloud APIs
 
 
 #local
-explorer_lib = {path="/run/media/akitsuki/1CDE887D3796F7AA/code-x/oelab_projects/explorer_lib"}
+explorer_lib = {path="../explorer_lib"}
 
 #rt
 tokio = { version = "1.17.0", features = ["full"] } # MIT
@@ -56,6 +60,7 @@ num_cpus = "1.13.1" # MIT OR Apache-2.0
 
 #benchmark
 simple-stopwatch = "0.1.4"
+
 
 
 

@@ -76,7 +76,8 @@ pub mod decoder
 
     fn decode_by_image<P: AsRef<Path>>(path:P)->Result<(Vec<u8>,u32,u32),Box<dyn Error>>
     {
-        let input = image::open(path)?;
+        let input = image::open(&path)?; //know bug : unsupport rgba webp
+        // println!("img opened :{:?}",path.as_ref());
         let (w,h) = input.dimensions();
         let output = input.into_rgb8().as_bytes().to_owned();
         Ok((output,w,h))
@@ -116,14 +117,14 @@ pub mod encoder
             error::Error
         },
     };
-    pub fn encode_to_avif(buf:&Vec<u8>,w:u32,h:u32,quality:f32,speed:u8)->Result<Vec<u8>,Box<dyn Error>>
+    pub fn encode_to_avif(buf:&Vec<u8>,w:u32,h:u32,quality:f32,speed:u8,threads:usize)->Result<Vec<u8>,Box<dyn Error>>
     {
         let mut rgb0 = vec![];
         {
             for i0 in 0..buf.len()/3
             {rgb0.push(rgb::RGB::new(buf[3*i0],buf[3*i0+1],buf[3*i0+2],));}
         }
-        let av1cfg = ravif::Config{quality,alpha_quality:20.0,speed,premultiplied_alpha:false,color_space:ravif::ColorSpace::RGB,threads:num_cpus::get()};
+        let av1cfg = ravif::Config{quality,alpha_quality:20.0,speed,premultiplied_alpha:false,color_space:ravif::ColorSpace::RGB,threads:threads};
         let img = ravif::Img::new(&rgb0[..], w as usize, h as usize);
         let (output,_) = ravif::encode_rgb(img, &av1cfg).unwrap();
         Ok(output)
